@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>login test</title>
+    <script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        var app = angular.module('info', []);
+            app.controller('MainController', function($rootScope, $scope, $http) {
+            $scope.message = '';
+            $scope.password = '';
+            //登录
+            $scope.modifyPassword = function() {
+                $scope.message = '';
+                $http(
+                    {
+                        url : '/modifyPassword',
+                        method : 'POST',
+                        headers : {
+                            'Content-Type' : 'application/x-www-form-urlencoded'
+                        },
+                        data : 'password=' + $scope.password
+                    }).success(function(r) {
+                    if (!r.success) {
+                        $scope.message = r.message;
+                        return;
+                    }
+                    window.location.href = '/';
+                });
+            }
+        });
+        /*]]>*/
+    </script>
+</head>
+<body ng-app="info" ng-controller="MainController"/>
+<body>
+    <h1>玩转spring boot——简单登录认证</h1>
+    <h4>
+        <a href="http://www.cnblogs.com/GoodHelper/">for test spring mvc</a>
+    </h4>
+    <h3 th:text="'登录用户: ' + ${user.name}"></h3>
+    <h3 th:text="'用户邮箱: '+ ${user.email}"></h3>
+    <h3 th:text="'注册时间: ' + ${registerTime}"></h3>
+    <h3 th:text="'修改时间: ' + ${updateTime}"></h3>
+    <a href="/logout">注销</a>
+    <h3 th:text="----------------------------"></h3>
+    <table cellspacing="2" style="background-color: #a0c6e5">
+        <tr>
+            <td>新密码:</td>
+            <td><input ng-model="password"/></td>
+        </tr>
+    </table>
+    <input type="button" value="修改密码" ng-click="modifyPassword()" />
+    <br />
+</body>
+</html>
